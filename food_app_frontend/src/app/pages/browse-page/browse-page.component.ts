@@ -5,6 +5,7 @@ import { DataService } from '../../services/data.service';
 import { FoodCardComponent } from '../../components/food-card/food-card.component';
 import { CartService } from '../../services/cart.service';
 import { FoodItem } from '../../models/food.models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-browse-page',
@@ -18,6 +19,7 @@ export class BrowsePageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private data = inject(DataService);
   private cart = inject(CartService);
+  private toast = inject(ToastService);
 
   items: FoodItem[] = [];
   loading = true;
@@ -48,6 +50,7 @@ export class BrowsePageComponent implements OnInit, OnDestroy {
   // PUBLIC_INTERFACE
   addToCart(item: FoodItem) {
     this.cart.add(item, 1);
+    this.toast.success(`Added "${item.name}" to cart.`);
   }
 
   // PUBLIC_INTERFACE

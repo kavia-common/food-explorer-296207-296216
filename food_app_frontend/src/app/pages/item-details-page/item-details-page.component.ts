@@ -6,6 +6,7 @@ import { CartService } from '../../services/cart.service';
 import { RatingStarsComponent } from '../../components/rating-stars/rating-stars.component';
 import { QuantitySelectorComponent } from '../../components/quantity-selector/quantity-selector.component';
 import { FoodItem } from '../../models/food.models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-item-details-page',
@@ -19,6 +20,7 @@ export class ItemDetailsPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private data = inject(DataService);
   private cart = inject(CartService);
+  private toast = inject(ToastService);
 
   item?: FoodItem;
   loading = true;
@@ -43,6 +45,8 @@ export class ItemDetailsPageComponent implements OnInit {
   addToCart() {
     if (this.item) {
       this.cart.add(this.item, this.quantity);
+      const qty = this.quantity || 1;
+      this.toast.success(`Added ${qty} × "${this.item.name}" to cart.`);
     }
   }
 }

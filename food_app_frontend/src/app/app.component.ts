@@ -8,11 +8,12 @@ import { CartService } from './services/cart.service';
 import { FeatureFlagService } from './services/feature-flag.service';
 import { FlagsToggleComponent } from './components/flags-toggle/flags-toggle.component';
 import { getEnv } from './utils/env.util';
+import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavBarComponent, CategorySidebarComponent, CartSidebarComponent, FlagsToggleComponent],
+  imports: [CommonModule, RouterOutlet, NavBarComponent, CategorySidebarComponent, CartSidebarComponent, FlagsToggleComponent, ToastContainerComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush

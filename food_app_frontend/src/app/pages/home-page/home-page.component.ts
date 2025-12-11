@@ -5,6 +5,7 @@ import { FoodCardComponent } from '../../components/food-card/food-card.componen
 import { CartService } from '../../services/cart.service';
 import { FeatureFlagService } from '../../services/feature-flag.service';
 import { FoodItem } from '../../models/food.models';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-home-page',
@@ -18,6 +19,7 @@ export class HomePageComponent implements OnInit {
   private data = inject(DataService);
   private cart = inject(CartService);
   private flags = inject(FeatureFlagService);
+  private toast = inject(ToastService);
 
   featured: FoodItem[] = [];
   recommended: FoodItem[] = [];
@@ -41,6 +43,7 @@ export class HomePageComponent implements OnInit {
   // PUBLIC_INTERFACE
   addToCart(item: FoodItem) {
     this.cart.add(item, 1);
+    this.toast.success(`Added "${item.name}" to cart.`);
   }
 
   // PUBLIC_INTERFACE

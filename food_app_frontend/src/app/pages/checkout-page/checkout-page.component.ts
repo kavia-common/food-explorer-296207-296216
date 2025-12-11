@@ -6,6 +6,7 @@ import { OrdersService } from '../../services/orders.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-checkout-page',
@@ -20,6 +21,7 @@ export class CheckoutPageComponent {
   private orders = inject(OrdersService);
   private router = inject(Router);
   private auth = inject(AuthService);
+  private toast = inject(ToastService);
 
   name = '';
   address = '';
@@ -60,6 +62,7 @@ export class CheckoutPageComponent {
       const msg = `Order placed! #${resp.orderId} - ${resp.status}. Total: $${total.toFixed(2)}`;
       // Prefer in-page success message and also alert for simple UX on browsers
       this.successMessage = msg;
+      this.toast.success('Your order has been placed successfully.');
       if (g && typeof g.alert === 'function') {
         g.alert(msg);
       }
@@ -76,11 +79,14 @@ export class CheckoutPageComponent {
         // Prompt login (mock)
         this.auth.login('demo', 'password');
         this.error = 'Please login to place your order.';
+        this.toast.error('You must be logged in to place an order.');
       } else if (err instanceof HttpErrorResponse) {
         const message = (err.error && (err.error.message || err.error.error)) || 'Failed to place order. Please try again.';
         this.error = message;
+        this.toast.error(message);
       } else {
         this.error = 'Failed to place order. Please try again.';
+        this.toast.error('Failed to place order. Please try again.');
       }
     } finally {
       this.loading = false;
