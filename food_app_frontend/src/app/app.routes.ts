@@ -1,16 +1,37 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './pages/home-page/home-page.component';
-import { BrowsePageComponent } from './pages/browse-page/browse-page.component';
-import { ItemDetailsPageComponent } from './pages/item-details-page/item-details-page.component';
-import { CartPageComponent } from './pages/cart-page/cart-page.component';
-import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomePageComponent, title: 'Home - Food Explorer' },
-  { path: 'browse', component: BrowsePageComponent, title: 'Browse - Food Explorer' },
-  { path: 'item/:id', component: ItemDetailsPageComponent, title: 'Item Details - Food Explorer' },
-  { path: 'cart', component: CartPageComponent, title: 'Your Cart - Food Explorer' },
-  { path: 'checkout', component: CheckoutPageComponent, title: 'Checkout - Food Explorer', canActivate: [authGuard] },
-  { path: '**', redirectTo: '' }
+  {
+    path: '',
+    title: 'Home - Food Explorer',
+    loadComponent: () =>
+      import('./pages/home-page/home-page.component').then(m => m.HomePageComponent),
+  },
+  {
+    path: 'browse',
+    title: 'Browse - Food Explorer',
+    loadComponent: () =>
+      import('./pages/browse-page/browse-page.component').then(m => m.BrowsePageComponent),
+  },
+  {
+    path: 'item/:id',
+    title: 'Item Details - Food Explorer',
+    loadComponent: () =>
+      import('./pages/item-details-page/item-details-page.component').then(m => m.ItemDetailsPageComponent),
+  },
+  {
+    path: 'cart',
+    title: 'Your Cart - Food Explorer',
+    loadComponent: () =>
+      import('./pages/cart-page/cart-page.component').then(m => m.CartPageComponent),
+  },
+  {
+    path: 'checkout',
+    title: 'Checkout - Food Explorer',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/checkout-page/checkout-page.component').then(m => m.CheckoutPageComponent),
+  },
+  { path: '**', redirectTo: '' },
 ];
