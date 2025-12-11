@@ -28,4 +28,9 @@
       }
     </aside>
   </div>
+
+  <!-- Dev-only flags toggle (instantiated only when node env != production) -->
+  @if (devMode) {
+    <app-flags-toggle />
+  }
 </div>

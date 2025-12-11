@@ -6,11 +6,13 @@ import { CartSidebarComponent } from './components/cart-sidebar/cart-sidebar.com
 import { CommonModule } from '@angular/common';
 import { CartService } from './services/cart.service';
 import { FeatureFlagService } from './services/feature-flag.service';
+import { FlagsToggleComponent } from './components/flags-toggle/flags-toggle.component';
+import { getEnv } from './utils/env.util';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NavBarComponent, CategorySidebarComponent, CartSidebarComponent],
+  imports: [CommonModule, RouterOutlet, NavBarComponent, CategorySidebarComponent, CartSidebarComponent, FlagsToggleComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -23,6 +25,9 @@ export class AppComponent {
 
   cartCount = computed(() => this.cart.totalQuantity());
   showDealsBanner = this.flags.isExperimentEnabled('live_deals');
+
+  // Expose a public flag for template to avoid calling functions in the template
+  devMode = getEnv('NG_APP_NODE_ENV', '') !== 'production';
 
   // PUBLIC_INTERFACE
   onSearch(term: string) {
