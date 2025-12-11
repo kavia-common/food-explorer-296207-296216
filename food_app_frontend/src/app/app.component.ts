@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { CategorySidebarComponent } from './components/category-sidebar/category-sidebar.component';
 import { CartSidebarComponent } from './components/cart-sidebar/cart-sidebar.component';
@@ -18,7 +18,18 @@ export class AppComponent {
   title = 'Food Explorer';
   private cart = inject(CartService);
   private flags = inject(FeatureFlagService);
+  private router = inject(Router);
 
   cartCount = computed(() => this.cart.totalQuantity());
   showDealsBanner = this.flags.isExperimentEnabled('live_deals');
+
+  // PUBLIC_INTERFACE
+  onSearch(term: string) {
+    const queryParams: any = {};
+    if (term && term.trim().length > 0) {
+      queryParams.q = term.trim();
+    }
+    // Navigate to /browse; when term is empty, do not include q so it resets results
+    this.router.navigate(['/browse'], { queryParams });
+  }
 }

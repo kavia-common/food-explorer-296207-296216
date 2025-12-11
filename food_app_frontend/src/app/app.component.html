@@ -1,5 +1,5 @@
 <div class="app-root">
-  <app-nav-bar [cartCount]="cartCount()" (search)="null"></app-nav-bar>
+  <app-nav-bar [cartCount]="cartCount()" (search)="onSearch($event)"></app-nav-bar>
 
   <div class="banner" *ngIf="showDealsBanner" aria-live="polite" role="status">
     🔥 Live deals: Save up to 25% on selected items today!

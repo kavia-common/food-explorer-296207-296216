@@ -26,12 +26,14 @@ export class BrowsePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.route.queryParamMap.subscribe(async (params) => {
       this.loading = true;
+      this.error = '';
       const cat = params.get('category') || undefined;
       const q = params.get('q') || undefined;
       try {
         this.items = await this.data.getItems(cat, q);
       } catch {
         this.error = 'Unable to load items.';
+        this.items = [];
       } finally {
         this.loading = false;
       }
