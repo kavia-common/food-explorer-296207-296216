@@ -1,5 +1,10 @@
 <h2 class="h">Checkout</h2>
+
 <form #f="ngForm" class="form" (ngSubmit)="submit(f)" novalidate>
+  <div class="state" *ngIf="loading" aria-live="polite">Placing your order...</div>
+  <div class="state error" *ngIf="!loading && error" aria-live="assertive">{{ error }}</div>
+  <div class="state" *ngIf="!loading && successMessage" aria-live="polite">{{ successMessage }}</div>
+
   <label>
     <span>Name</span>
     <input name="name" [(ngModel)]="name" required aria-required="true" />
@@ -12,5 +17,5 @@
     <span>Payment</span>
     <input name="payment" [(ngModel)]="payment" placeholder="Card token placeholder" required aria-required="true" />
   </label>
-  <button type="submit" [disabled]="f.invalid">Place order</button>
+  <button type="submit" [disabled]="f.invalid || loading">{{ loading ? 'Placing...' : 'Place order' }}</button>
 </form>
