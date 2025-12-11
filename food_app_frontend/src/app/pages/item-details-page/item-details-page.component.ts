@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../../services/data.service';
@@ -12,7 +12,8 @@ import { FoodItem } from '../../models/food.models';
   standalone: true,
   imports: [CommonModule, RatingStarsComponent, QuantitySelectorComponent],
   templateUrl: './item-details-page.component.html',
-  styleUrls: ['./item-details-page.component.css']
+  styleUrls: ['./item-details-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ItemDetailsPageComponent implements OnInit {
   private route = inject(ActivatedRoute);

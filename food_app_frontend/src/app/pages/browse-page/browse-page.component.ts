@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
@@ -11,7 +11,8 @@ import { FoodItem } from '../../models/food.models';
   standalone: true,
   imports: [CommonModule, RouterModule, FoodCardComponent],
   templateUrl: './browse-page.component.html',
-  styleUrls: ['./browse-page.component.css']
+  styleUrls: ['./browse-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BrowsePageComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
@@ -47,5 +48,10 @@ export class BrowsePageComponent implements OnInit, OnDestroy {
   // PUBLIC_INTERFACE
   addToCart(item: FoodItem) {
     this.cart.add(item, 1);
+  }
+
+  // PUBLIC_INTERFACE
+  trackByItem(_index: number, i: FoodItem) {
+    return i.id;
   }
 }

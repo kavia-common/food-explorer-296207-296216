@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { RouterModule } from '@angular/router';
@@ -9,7 +9,8 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, SearchBarComponent, RouterModule],
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.css']
+  styleUrls: ['./nav-bar.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavBarComponent {
   @Input() cartCount = 0;

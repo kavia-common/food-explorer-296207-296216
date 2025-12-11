@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
@@ -12,7 +12,8 @@ import { HttpErrorResponse } from '@angular/common/http';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './checkout-page.component.html',
-  styleUrls: ['./checkout-page.component.css']
+  styleUrls: ['./checkout-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckoutPageComponent {
   private cart = inject(CartService);

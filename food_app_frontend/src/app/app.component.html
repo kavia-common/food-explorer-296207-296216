@@ -9,7 +9,11 @@
 
   <div class="layout">
     <aside class="left-rail" aria-label="Food Categories">
-      <app-category-sidebar></app-category-sidebar>
+      @defer (on idle) {
+        <app-category-sidebar></app-category-sidebar>
+      } @placeholder {
+        <div>Loading categories…</div>
+      }
     </aside>
 
     <main id="main-content" class="content" role="main" tabindex="-1">
@@ -17,7 +21,11 @@
     </main>
 
     <aside class="right-rail" aria-label="Shopping Cart">
-      <app-cart-sidebar></app-cart-sidebar>
+      @defer (on idle) {
+        <app-cart-sidebar></app-cart-sidebar>
+      } @placeholder {
+        <div>Loading cart…</div>
+      }
     </aside>
   </div>
 </div>

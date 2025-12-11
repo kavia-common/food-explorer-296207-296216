@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar.component';
 
@@ -6,6 +6,7 @@ import { CartSidebarComponent } from '../../components/cart-sidebar/cart-sidebar
   selector: 'app-cart-page',
   standalone: true,
   imports: [CommonModule, CartSidebarComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="h">Your Cart</h2>
     <app-cart-sidebar></app-cart-sidebar>

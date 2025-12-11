@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { FoodCardComponent } from '../../components/food-card/food-card.component';
@@ -11,7 +11,8 @@ import { FoodItem } from '../../models/food.models';
   standalone: true,
   imports: [CommonModule, FoodCardComponent],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css']
+  styleUrls: ['./home-page.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
   private data = inject(DataService);
@@ -40,5 +41,10 @@ export class HomePageComponent implements OnInit {
   // PUBLIC_INTERFACE
   addToCart(item: FoodItem) {
     this.cart.add(item, 1);
+  }
+
+  // PUBLIC_INTERFACE
+  trackByItem(_index: number, i: FoodItem) {
+    return i.id;
   }
 }

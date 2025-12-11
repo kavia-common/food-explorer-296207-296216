@@ -2,6 +2,6 @@
 <div class="state" *ngIf="loading">Loading...</div>
 <div class="state error" *ngIf="!loading && error">{{ error }}</div>
 <div class="grid" *ngIf="!loading && !error && items.length">
-  <app-food-card *ngFor="let i of items" [item]="i" (add)="addToCart($event)"></app-food-card>
+  <app-food-card *ngFor="let i of items; trackBy: trackByItem" [item]="i" (add)="addToCart($event)"></app-food-card>
 </div>
 <div class="empty" *ngIf="!loading && !error && !items.length">No items match your filters.</div>

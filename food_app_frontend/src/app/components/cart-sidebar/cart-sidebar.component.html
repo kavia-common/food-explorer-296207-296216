@@ -4,7 +4,7 @@
     Your cart is empty.
   </div>
   <ul class="list" *ngIf="itemsSig().length > 0">
-    <li class="row" *ngFor="let ci of itemsSig()">
+    <li class="row" *ngFor="let ci of itemsSig(); trackBy: trackByCartItem">
       <div class="name">{{ ci.item.name }}</div>
       <div class="controls">
         <app-quantity-selector [value]="ci.quantity" (valueChange)="update(ci.item.id, $event)"></app-quantity-selector>

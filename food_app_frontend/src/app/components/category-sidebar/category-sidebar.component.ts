@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../../services/data.service';
 import { SelectionService } from '../../services/selection.service';
@@ -10,7 +10,8 @@ import { Category } from '../../models/food.models';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './category-sidebar.component.html',
-  styleUrls: ['./category-sidebar.component.css']
+  styleUrls: ['./category-sidebar.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategorySidebarComponent implements OnInit {
   private data = inject(DataService);
@@ -51,5 +52,10 @@ export class CategorySidebarComponent implements OnInit {
       }
       this.select(id);
     }
+  }
+
+  // PUBLIC_INTERFACE
+  trackByCategory(_index: number, c: Category) {
+    return c.id;
   }
 }

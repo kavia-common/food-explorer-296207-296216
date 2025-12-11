@@ -16,7 +16,7 @@
     </li>
     <li
       class="cat-item"
-      *ngFor="let c of categories"
+      *ngFor="let c of categories; trackBy: trackByCategory"
       [class.active]="selectedId === c.id"
       (click)="select(c.id)"
       (keydown)="onKeydown($event, c.id)"

@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { CategorySidebarComponent } from './components/category-sidebar/category-sidebar.component';
@@ -12,7 +12,8 @@ import { FeatureFlagService } from './services/feature-flag.service';
   standalone: true,
   imports: [CommonModule, RouterOutlet, NavBarComponent, CategorySidebarComponent, CartSidebarComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   title = 'Food Explorer';

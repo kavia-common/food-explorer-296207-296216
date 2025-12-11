@@ -3,7 +3,7 @@
   <div class="state" *ngIf="loading">Loading...</div>
   <div class="state error" *ngIf="!loading && error">{{ error }}</div>
   <div class="grid" *ngIf="!loading && !error && featured.length">
-    <app-food-card *ngFor="let i of featured" [item]="i" (add)="addToCart($event)"></app-food-card>
+    <app-food-card *ngFor="let i of featured; trackBy: trackByItem" [item]="i" (add)="addToCart($event)"></app-food-card>
   </div>
   <div class="empty" *ngIf="!loading && !error && !featured.length">No featured items right now.</div>
 </section>
@@ -11,6 +11,6 @@
 <section class="section" *ngIf="recommended.length">
   <h2 class="h">Recommended</h2>
   <div class="grid">
-    <app-food-card *ngFor="let i of recommended" [item]="i" (add)="addToCart($event)"></app-food-card>
+    <app-food-card *ngFor="let i of recommended; trackBy: trackByItem" [item]="i" (add)="addToCart($event)"></app-food-card>
   </div>
 </section>
