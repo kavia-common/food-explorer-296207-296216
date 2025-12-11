@@ -1,4 +1,6 @@
 <div class="app-root">
+  <a href="#main-content" class="sr-only focusable-skip">Skip to main content</a>
+
   <app-nav-bar [cartCount]="cartCount()" (search)="onSearch($event)"></app-nav-bar>
 
   <div class="banner" *ngIf="showDealsBanner" aria-live="polite" role="status">
@@ -10,7 +12,7 @@
       <app-category-sidebar></app-category-sidebar>
     </aside>
 
-    <main class="content" role="main">
+    <main id="main-content" class="content" role="main" tabindex="-1">
       <router-outlet></router-outlet>
     </main>
 

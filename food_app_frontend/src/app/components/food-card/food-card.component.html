@@ -1,5 +1,5 @@
-<article class="card" [attr.aria-label]="item.name">
-  <a class="image" [routerLink]="['/item', item.id]">
+<article class="card" role="group" [attr.aria-label]="item.name">
+  <a class="image" [routerLink]="['/item', item.id]" [attr.aria-label]="'View details for ' + item.name">
     <div class="img" aria-hidden="true">{{ item.imageUrl ? '' : '🍽️' }}</div>
   </a>
   <div class="body">

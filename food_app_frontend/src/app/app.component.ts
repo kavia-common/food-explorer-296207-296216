@@ -30,6 +30,14 @@ export class AppComponent {
       queryParams.q = term.trim();
     }
     // Navigate to /browse; when term is empty, do not include q so it resets results
-    this.router.navigate(['/browse'], { queryParams });
+    this.router.navigate(['/browse'], { queryParams }).then(() => {
+      // Move focus to main content for better screen-reader flow (SSR-safe)
+      const g: any = typeof globalThis !== 'undefined' ? (globalThis as any) : undefined;
+      const doc: any = g && g.document ? g.document : undefined;
+      const el = doc?.getElementById?.('main-content') as (HTMLElement | null);
+      if (el && typeof el.focus === 'function') {
+        el.focus();
+      }
+    });
   }
 }

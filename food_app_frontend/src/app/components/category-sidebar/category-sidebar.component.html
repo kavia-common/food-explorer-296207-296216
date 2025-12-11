@@ -3,10 +3,27 @@
   <div class="state" *ngIf="loading">Loading...</div>
   <div class="state error" *ngIf="!loading && error">{{ error }}</div>
   <ul class="cat-list" role="listbox" aria-label="Categories" *ngIf="!loading && !error">
-    <li class="cat-item" [class.active]="!selectedId" (click)="select(undefined)" tabindex="0" role="option" [attr.aria-selected]="!selectedId">
+    <li
+      class="cat-item"
+      [class.active]="!selectedId"
+      (click)="select(undefined)"
+      (keydown)="onKeydown($event, undefined)"
+      tabindex="0"
+      role="option"
+      [attr.aria-selected]="!selectedId ? 'true' : 'false'"
+    >
       <span>All</span>
     </li>
-    <li class="cat-item" *ngFor="let c of categories" [class.active]="selectedId === c.id" (click)="select(c.id)" tabindex="0" role="option" [attr.aria-selected]="selectedId === c.id">
+    <li
+      class="cat-item"
+      *ngFor="let c of categories"
+      [class.active]="selectedId === c.id"
+      (click)="select(c.id)"
+      (keydown)="onKeydown($event, c.id)"
+      tabindex="0"
+      role="option"
+      [attr.aria-selected]="selectedId === c.id ? 'true' : 'false'"
+    >
       <span class="icon">{{ c.icon || '•' }}</span>
       <span>{{ c.name }}</span>
     </li>

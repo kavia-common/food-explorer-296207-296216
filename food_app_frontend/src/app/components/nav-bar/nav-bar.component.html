@@ -1,10 +1,10 @@
 <header class="nav" role="banner">
-  <div class="brand" aria-label="Food Explorer Home" tabindex="0" routerLink="/">
+  <a class="brand" [attr.aria-label]="'Food Explorer Home'" routerLink="/">
     <span class="logo">🍽️</span>
     <span class="title">Food Explorer</span>
-  </div>
+  </a>
 
-  <app-search-bar (search)="onSearch($event)" aria-label="Search food"></app-search-bar>
+  <app-search-bar (search)="onSearch($event)" [attr.aria-label]="'Search food'"></app-search-bar>
 
   <div style="display: inline-flex; align-items: center; gap: 8px; justify-self: end;">
     <button
@@ -15,7 +15,7 @@
       {{ isAuthed() ? 'Logout' : 'Login' }}
     </button>
 
-    <a class="cart" routerLink="/cart" aria-label="Open cart">
+    <a class="cart" routerLink="/cart" [attr.aria-label]="'Open cart'">
       <span class="cart-icon">🛒</span>
       <span class="badge" aria-live="polite">{{ cartCount }}</span>
     </a>

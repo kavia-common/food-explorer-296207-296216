@@ -41,4 +41,15 @@ export class CategorySidebarComponent implements OnInit {
     if (id) queryParams.category = id;
     this.router.navigate(['/browse'], { queryParams });
   }
+
+  // PUBLIC_INTERFACE
+  onKeydown(event: any, id?: string) {
+    const key = event?.key as string | undefined;
+    if (key === 'Enter' || key === ' ') {
+      if (event && typeof event.preventDefault === 'function') {
+        event.preventDefault();
+      }
+      this.select(id);
+    }
+  }
 }
