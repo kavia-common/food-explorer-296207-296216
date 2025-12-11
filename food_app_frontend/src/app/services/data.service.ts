@@ -1,8 +1,17 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { Category, FoodItem } from '../models/food.models';
 import { getApiBase } from '../utils/env.util';
-import { AuthService } from './auth.service';
 
+/**
+ * DataService
+ * Migrated to Angular HttpClient for data fetching with SSR-safe fallbacks.
+ * - Uses HttpClient for GET requests to /categories, /items, and /items/:id.
+ * - Keeps mock fallback data when API base is not configured or on request failure.
+ * - Relies on auth and error interceptors for Authorization header and retries.
+ * - Sets withCredentials on requests to allow cookie-based sessions when needed.
+ */
 const MOCK_CATEGORIES: Category[] = [
   { id: 'pizza', name: 'Pizza', icon: '🍕' },
   { id: 'sushi', name: 'Sushi', icon: '🍣' },
@@ -23,65 +32,72 @@ const MOCK_ITEMS: FoodItem[] = [
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private base = getApiBase();
-  private auth = inject(AuthService);
+  private http = inject(HttpClient);
 
-  private get fetchFn(): ((input: any, init?: any) => Promise<any>) | undefined {
-    const g: any = globalThis as any;
-    return typeof g.fetch === 'function' ? g.fetch.bind(g) : undefined;
-  }
-
-  private buildAuthHeaders(): Record<string, string> {
-    const token = this.auth.getToken();
-    if (!token) return {};
-    return { 'Authorization': `Bearer ${token}` };
-  }
-
-  // PUBLIC_INTERFACE
+  /**
+   * PUBLIC_INTERFACE
+   * Fetch categories from backend if API base is configured, else return mock categories.
+   * Uses withCredentials to allow cookie-based sessions. Auth header is attached via interceptor.
+   */
   async getCategories(): Promise<Category[]> {
-    if (!this.base || !this.fetchFn) return MOCK_CATEGORIES;
+    if (!this.base) {
+      return MOCK_CATEGORIES;
+    }
     try {
-      const res = await this.fetchFn(`${this.base}/categories`, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
-      if (!res?.ok) throw new Error('Failed categories');
-      const data = await res.json();
-      if (!Array.isArray(data) || !data.length) return MOCK_CATEGORIES;
-      return data as Category[];
+      const url = `${this.base}/categories`;
+      const data = await firstValueFrom(
+        this.http.get<Category[]>(url, { withCredentials: true })
+      );
+      if (!Array.isArray(data) || data.length === 0) {
+        return MOCK_CATEGORIES;
+      }
+      return data;
     } catch {
       return MOCK_CATEGORIES;
     }
   }
 
-  // PUBLIC_INTERFACE
+  /**
+   * PUBLIC_INTERFACE
+   * Fetch items with optional category and search filters.
+   * Falls back to filtering mock data on failure or when API base is missing.
+   */
   async getItems(categoryId?: string, search?: string): Promise<FoodItem[]> {
-    if (!this.base || !this.fetchFn) return this.filterMock(MOCK_ITEMS, categoryId, search);
+    if (!this.base) {
+      return this.filterMock(MOCK_ITEMS, categoryId, search);
+    }
     try {
-      const g: any = globalThis as any;
-      const hasURLSearchParams = typeof g.URLSearchParams === 'function';
-      const QS: any = hasURLSearchParams ? g.URLSearchParams : undefined;
-      const qs: any = hasURLSearchParams ? new QS() : { toString: () => '' };
-      if (hasURLSearchParams) {
-        if (categoryId) qs.set('categoryId', categoryId);
-        if (search) qs.set('q', search);
+      let params = new HttpParams();
+      if (categoryId) params = params.set('categoryId', categoryId);
+      if (search) params = params.set('q', search);
+
+      const url = `${this.base}/items`;
+      const arr = await firstValueFrom(
+        this.http.get<FoodItem[]>(url, { params, withCredentials: true })
+      );
+      if (!Array.isArray(arr) || arr.length === 0) {
+        return this.filterMock(MOCK_ITEMS, categoryId, search);
       }
-      const url = `${this.base}/items${qs.toString() ? ('?' + qs.toString()) : ''}`;
-      const res = await this.fetchFn(url, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
-      if (!res?.ok) throw new Error('Failed items');
-      const data = await res.json();
-      const arr = (Array.isArray(data) ? data as FoodItem[] : []);
-      if (!arr.length) return this.filterMock(MOCK_ITEMS, categoryId, search);
       return arr;
     } catch {
       return this.filterMock(MOCK_ITEMS, categoryId, search);
     }
   }
 
-  // PUBLIC_INTERFACE
+  /**
+   * PUBLIC_INTERFACE
+   * Fetch a single item by id. Returns mock item if request fails or API base not configured.
+   */
   async getItemById(id: string): Promise<FoodItem | undefined> {
-    if (!this.base || !this.fetchFn) return MOCK_ITEMS.find(i => i.id === id);
+    if (!this.base) {
+      return MOCK_ITEMS.find(i => i.id === id);
+    }
     try {
-      const res = await this.fetchFn(`${this.base}/items/${id}`, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
-      if (!res?.ok) throw new Error('Failed item');
-      const data = await res.json();
-      return data as FoodItem;
+      const url = `${this.base}/items/${encodeURIComponent(id)}`;
+      const item = await firstValueFrom(
+        this.http.get<FoodItem>(url, { withCredentials: true })
+      );
+      return item;
     } catch {
       return MOCK_ITEMS.find(i => i.id === id);
     }
