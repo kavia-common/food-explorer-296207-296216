@@ -6,6 +6,8 @@ import { FoodCardComponent } from '../../components/food-card/food-card.componen
 import { CartService } from '../../services/cart.service';
 import { FoodItem } from '../../models/food.models';
 import { ToastService } from '../../services/toast.service';
+import { SelectionService } from '../../services/selection.service';
+import { combineLatest, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-browse-page',
@@ -20,18 +22,25 @@ export class BrowsePageComponent implements OnInit, OnDestroy {
   private data = inject(DataService);
   private cart = inject(CartService);
   private toast = inject(ToastService);
+  private selection = inject(SelectionService);
 
   items: FoodItem[] = [];
   loading = true;
   error = '';
-  sub?: any;
+  sub?: Subscription;
 
   ngOnInit() {
+    // Continue listening to query params for deep-link support and back/forward navigation.
     this.sub = this.route.queryParamMap.subscribe(async (params) => {
       this.loading = true;
       this.error = '';
       const cat = params.get('category') || undefined;
       const q = params.get('q') || undefined;
+
+      // Keep SelectionService in sync if user navigates via URL directly (e.g., back/forward)
+      this.selection.setSelected(cat);
+      this.selection.setSearch(q);
+
       try {
         this.items = await this.data.getItems(cat, q);
       } catch {

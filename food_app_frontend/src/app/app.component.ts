@@ -9,6 +9,7 @@ import { FeatureFlagService } from './services/feature-flag.service';
 import { FlagsToggleComponent } from './components/flags-toggle/flags-toggle.component';
 import { getEnv } from './utils/env.util';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
+import { SelectionService } from './services/selection.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent {
   private cart = inject(CartService);
   private flags = inject(FeatureFlagService);
   private router = inject(Router);
+  private selection = inject(SelectionService);
 
   cartCount = computed(() => this.cart.totalQuantity());
   showDealsBanner = this.flags.isExperimentEnabled('live_deals');
@@ -32,12 +34,11 @@ export class AppComponent {
 
   // PUBLIC_INTERFACE
   onSearch(term: string) {
-    const queryParams: any = {};
-    if (term && term.trim().length > 0) {
-      queryParams.q = term.trim();
-    }
-    // Navigate to /browse; when term is empty, do not include q so it resets results
-    this.router.navigate(['/browse'], { queryParams }).then(() => {
+    // Update SelectionService, which will sync "q" to URL
+    this.selection.setSearch(term);
+
+    // Ensure we are on /browse; query param changes are handled by service effect
+    this.router.navigate(['/browse']).then(() => {
       // Move focus to main content for better screen-reader flow (SSR-safe)
       const g: any = typeof globalThis !== 'undefined' ? (globalThis as any) : undefined;
       const doc: any = g && g.document ? g.document : undefined;

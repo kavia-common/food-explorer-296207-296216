@@ -32,15 +32,19 @@ export class CategorySidebarComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+
+    // Hydrate initial selectedId from SelectionService (which itself reads from query params on init)
+    this.selectedId = this.selection.selectedId();
   }
 
   // PUBLIC_INTERFACE
   select(id?: string) {
     this.selectedId = id;
     this.selection.setSelected(id);
-    const queryParams: any = {};
-    if (id) queryParams.category = id;
-    this.router.navigate(['/browse'], { queryParams });
+
+    // Navigate to /browse while preserving query params changes performed by service
+    // We only direct the route path; query params are handled by SelectionService effect.
+    this.router.navigate(['/browse']).catch(() => {});
   }
 
   // PUBLIC_INTERFACE
