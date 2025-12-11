@@ -6,8 +6,18 @@
 
   <app-search-bar (search)="onSearch($event)" aria-label="Search food"></app-search-bar>
 
-  <a class="cart" routerLink="/cart" aria-label="Open cart">
-    <span class="cart-icon">🛒</span>
-    <span class="badge" aria-live="polite">{{ cartCount }}</span>
-  </a>
+  <div style="display: inline-flex; align-items: center; gap: 8px; justify-self: end;">
+    <button
+      type="button"
+      (click)="isAuthed() ? logout() : login()"
+      [attr.aria-label]="isAuthed() ? 'Logout' : 'Login'"
+      style="padding: 8px 10px; border-radius: 999px; border: 1px solid rgba(17,24,39,0.06); background: #ffffff; cursor: pointer;">
+      {{ isAuthed() ? 'Logout' : 'Login' }}
+    </button>
+
+    <a class="cart" routerLink="/cart" aria-label="Open cart">
+      <span class="cart-icon">🛒</span>
+      <span class="badge" aria-live="polite">{{ cartCount }}</span>
+    </a>
+  </div>
 </header>

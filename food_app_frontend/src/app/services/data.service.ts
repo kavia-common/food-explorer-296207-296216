@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Category, FoodItem } from '../models/food.models';
 import { getApiBase } from '../utils/env.util';
+import { AuthService } from './auth.service';
 
 const MOCK_CATEGORIES: Category[] = [
   { id: 'pizza', name: 'Pizza', icon: '🍕' },
@@ -22,16 +23,24 @@ const MOCK_ITEMS: FoodItem[] = [
 @Injectable({ providedIn: 'root' })
 export class DataService {
   private base = getApiBase();
+  private auth = inject(AuthService);
+
   private get fetchFn(): ((input: any, init?: any) => Promise<any>) | undefined {
     const g: any = globalThis as any;
     return typeof g.fetch === 'function' ? g.fetch.bind(g) : undefined;
+  }
+
+  private buildAuthHeaders(): Record<string, string> {
+    const token = this.auth.getToken();
+    if (!token) return {};
+    return { 'Authorization': `Bearer ${token}` };
   }
 
   // PUBLIC_INTERFACE
   async getCategories(): Promise<Category[]> {
     if (!this.base || !this.fetchFn) return MOCK_CATEGORIES;
     try {
-      const res = await this.fetchFn(`${this.base}/categories`, { credentials: 'include' } as any);
+      const res = await this.fetchFn(`${this.base}/categories`, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
       if (!res?.ok) throw new Error('Failed categories');
       const data = await res.json();
       if (!Array.isArray(data) || !data.length) return MOCK_CATEGORIES;
@@ -54,7 +63,7 @@ export class DataService {
         if (search) qs.set('q', search);
       }
       const url = `${this.base}/items${qs.toString() ? ('?' + qs.toString()) : ''}`;
-      const res = await this.fetchFn(url, { credentials: 'include' } as any);
+      const res = await this.fetchFn(url, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
       if (!res?.ok) throw new Error('Failed items');
       const data = await res.json();
       const arr = (Array.isArray(data) ? data as FoodItem[] : []);
@@ -69,7 +78,7 @@ export class DataService {
   async getItemById(id: string): Promise<FoodItem | undefined> {
     if (!this.base || !this.fetchFn) return MOCK_ITEMS.find(i => i.id === id);
     try {
-      const res = await this.fetchFn(`${this.base}/items/${id}`, { credentials: 'include' } as any);
+      const res = await this.fetchFn(`${this.base}/items/${id}`, { credentials: 'include', headers: { ...this.buildAuthHeaders() } } as any);
       if (!res?.ok) throw new Error('Failed item');
       const data = await res.json();
       return data as FoodItem;
