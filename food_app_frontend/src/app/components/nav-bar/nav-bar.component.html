@@ -1,0 +1,13 @@
+<header class="nav" role="banner">
+  <div class="brand" aria-label="Food Explorer Home" tabindex="0" routerLink="/">
+    <span class="logo">🍽️</span>
+    <span class="title">Food Explorer</span>
+  </div>
+
+  <app-search-bar (search)="onSearch($event)" aria-label="Search food"></app-search-bar>
+
+  <a class="cart" routerLink="/cart" aria-label="Open cart">
+    <span class="cart-icon">🛒</span>
+    <span class="badge" aria-live="polite">{{ cartCount }}</span>
+  </a>
+</header>

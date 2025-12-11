@@ -1,0 +1,12 @@
+<form class="search" role="search" (submit)="$event.preventDefault(); submit()">
+  <input
+    type="search"
+    [(ngModel)]="term"
+    name="q"
+    placeholder="Search dishes, categories..."
+    aria-label="Search"
+  />
+  <button type="submit" aria-label="Search">
+    Search
+  </button>
+</form>

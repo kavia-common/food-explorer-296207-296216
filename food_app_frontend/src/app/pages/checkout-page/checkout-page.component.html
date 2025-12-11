@@ -1,0 +1,16 @@
+<h2 class="h">Checkout</h2>
+<form #f="ngForm" class="form" (ngSubmit)="submit(f)" novalidate>
+  <label>
+    <span>Name</span>
+    <input name="name" [(ngModel)]="name" required aria-required="true" />
+  </label>
+  <label>
+    <span>Address</span>
+    <textarea name="address" [(ngModel)]="address" required aria-required="true"></textarea>
+  </label>
+  <label>
+    <span>Payment</span>
+    <input name="payment" [(ngModel)]="payment" placeholder="Card token placeholder" required aria-required="true" />
+  </label>
+  <button type="submit" [disabled]="f.invalid">Place order</button>
+</form>

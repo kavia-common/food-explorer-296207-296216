@@ -1,0 +1,27 @@
+.card {
+  display: grid;
+  grid-template-rows: 140px 1fr;
+  background: #ffffff;
+  border: 1px solid rgba(17,24,39,0.06);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.04);
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+}
+.image { display: block; background: linear-gradient(180deg, rgba(37,99,235,.06), rgba(255,255,255,1)); }
+.img { height: 100%; display: grid; place-items: center; font-size: 40px; color: #2563EB; }
+.body { padding: 12px; display: grid; gap: 8px; }
+.title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.title { margin: 0; font-size: 16px; }
+.desc { color: #6b7280; font-size: 14px; margin: 0; }
+.footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.price { font-weight: 700; color: #111827; }
+.footer button {
+  background: #2563EB; color: white; border: none; border-radius: 10px; padding: 8px 12px; cursor: pointer;
+  transition: opacity .15s ease, transform .15s ease;
+}
+.footer button:hover { opacity: .95; transform: translateY(-1px); }

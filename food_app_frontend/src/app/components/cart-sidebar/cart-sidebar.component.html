@@ -1,0 +1,23 @@
+<div class="cart-wrap">
+  <h3 class="hdr">Your Cart</h3>
+  <div class="empty" *ngIf="itemsSig().length === 0">
+    Your cart is empty.
+  </div>
+  <ul class="list" *ngIf="itemsSig().length > 0">
+    <li class="row" *ngFor="let ci of itemsSig()">
+      <div class="name">{{ ci.item.name }}</div>
+      <div class="controls">
+        <app-quantity-selector [value]="ci.quantity" (valueChange)="update(ci.item.id, $event)"></app-quantity-selector>
+        <button class="remove" type="button" (click)="remove(ci.item.id)" aria-label="Remove item">Remove</button>
+      </div>
+      <div class="price">${{ (ci.item.price * ci.quantity).toFixed(2) }}</div>
+    </li>
+  </ul>
+  <div class="total">
+    <div>Total ({{ qty() }} items)</div>
+    <div class="amt">${{ total().toFixed(2) }}</div>
+  </div>
+  <a class="checkout" routerLink="/checkout" [class.disabled]="itemsSig().length === 0" [attr.aria-disabled]="itemsSig().length === 0">
+    Proceed to Checkout
+  </a>
+</div>

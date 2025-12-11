@@ -1,0 +1,16 @@
+<article class="card" [attr.aria-label]="item.name">
+  <a class="image" [routerLink]="['/item', item.id]">
+    <div class="img" aria-hidden="true">{{ item.imageUrl ? '' : '🍽️' }}</div>
+  </a>
+  <div class="body">
+    <div class="title-row">
+      <h3 class="title">{{ item.name }}</h3>
+      <app-rating-stars [rating]="item.rating || 0"></app-rating-stars>
+    </div>
+    <p class="desc">{{ item.description }}</p>
+    <div class="footer">
+      <div class="price">${{ item.price.toFixed(2) }}</div>
+      <button type="button" (click)="onAdd()" aria-label="Add to cart">Add</button>
+    </div>
+  </div>
+</article>

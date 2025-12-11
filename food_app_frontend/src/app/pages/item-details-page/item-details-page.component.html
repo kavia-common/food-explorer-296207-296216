@@ -1,0 +1,15 @@
+<div class="wrap" *ngIf="!loading && !error && item">
+  <div class="img">🍽️</div>
+  <div class="info">
+    <h2 class="title">{{ item.name }}</h2>
+    <app-rating-stars [rating]="item.rating || 0"></app-rating-stars>
+    <p class="desc">{{ item.description }}</p>
+    <div class="row">
+      <div class="price">${{ item.price.toFixed(2) }}</div>
+      <app-quantity-selector [(value)]="quantity"></app-quantity-selector>
+    </div>
+    <button class="add" type="button" (click)="addToCart()">Add to cart</button>
+  </div>
+</div>
+<div class="state" *ngIf="loading">Loading...</div>
+<div class="state error" *ngIf="!loading && error">{{ error }}</div>
